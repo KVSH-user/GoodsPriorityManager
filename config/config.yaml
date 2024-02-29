@@ -1,0 +1,22 @@
+env: "dev"
+http_server:
+  address: "localhost:8001"
+  timeout: 4s
+  idle_timeout: 60s
+postgres:
+  host: "localhost"
+  port: "5432"
+  user: "postgres"
+  password: "qwerty"
+  db_name: "postgres"
+clickhouse:
+  host: "localhost"
+  port: "9000"
+  user: "default"
+  password: ""
+  db_name: "default"
+redis:
+  address: "localhost:6379"
+  user: ""
+  password: ""
+  db: 0
