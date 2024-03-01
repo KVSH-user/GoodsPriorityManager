@@ -129,10 +129,11 @@ func (s *Storage) DeleteGood(id, projectId int) (entity.GoodRemoveResponse, stri
 	const op = "storage.postgres.DeleteGood"
 
 	var (
-		response    entity.GoodRemoveResponse
-		name        string
-		description string
-		priority    int
+		response       entity.GoodRemoveResponse
+		name           string
+		descriptionStr string
+		description    sql.NullString
+		priority       int
 	)
 
 	query := `
@@ -141,7 +142,7 @@ func (s *Storage) DeleteGood(id, projectId int) (entity.GoodRemoveResponse, stri
 
 	tx, err := s.db.Begin()
 	if err != nil {
-		return response, name, description, priority, fmt.Errorf("%s: %w", op, err)
+		return response, name, descriptionStr, priority, fmt.Errorf("%s: %w", op, err)
 	}
 
 	err = tx.QueryRow(query, id, projectId).Scan(&response.Id,
@@ -152,18 +153,24 @@ func (s *Storage) DeleteGood(id, projectId int) (entity.GoodRemoveResponse, stri
 		&response.Removed)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return response, name, description, priority, ErrNotFound
+			return response, name, descriptionStr, priority, ErrNotFound
 		}
 		tx.Rollback()
-		return response, name, description, priority, fmt.Errorf("%s: %w", op, err)
+		return response, name, descriptionStr, priority, fmt.Errorf("%s: %w", op, err)
 	}
 
 	err = tx.Commit()
 	if err != nil {
-		return response, name, description, priority, fmt.Errorf("%s: %w", op, err)
+		return response, name, descriptionStr, priority, fmt.Errorf("%s: %w", op, err)
 	}
 
-	return response, name, description, priority, nil
+	if description.Valid {
+		descriptionStr = description.String
+	} else {
+		descriptionStr = ""
+	}
+
+	return response, name, descriptionStr, priority, nil
 }
 
 func (s *Storage) GetGoodByID(key int) (entity.GoodsForList, error) {

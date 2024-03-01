@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
+	"github.com/sirupsen/logrus"
 	"hezzl_test/internal/entity"
 	"time"
 )
@@ -67,5 +68,29 @@ func InsertLogToClickHouse(chDB driver.Conn, event entity.GoodEvent) error {
 	if err != nil {
 		return fmt.Errorf("failed to insert event to ClickHouse: %s: %w", op, err)
 	}
+	return nil
+}
+
+func CreateTableClickHouse(chDB driver.Conn) error {
+	const op = "storage.clickhouse.CreateTableClickHouse"
+
+	ctx := context.Background()
+
+	err := chDB.Exec(ctx, `
+	CREATE TABLE IF NOT EXISTS events(
+                        id Int32,
+                        ProjectId Int32,
+                        Name String,
+                        Description String,
+                        Priority Int32,
+                        Removed UInt8,
+                        EventTime DateTime
+) ENGINE = MergeTree()
+      ORDER BY (id, ProjectId, Name);
+	`)
+	if err != nil {
+		return fmt.Errorf("failed create ClickHouse table: %s: %w", op, err)
+	}
+	logrus.Info("Clickhouse table created")
 	return nil
 }

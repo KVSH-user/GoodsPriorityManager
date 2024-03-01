@@ -55,6 +55,12 @@ func main() {
 		log.Error("Error initializing ClickHouse connection: ", err)
 		os.Exit(1)
 	}
+
+	clickTable := clickhouse.CreateTableClickHouse(chDB)
+	if err != nil {
+		log.Error("failed create ClickHouse table: ", err)
+	}
+	_ = clickTable
 	defer chDB.Close()
 
 	natsConn, err := nats.Connect(nats.DefaultURL)

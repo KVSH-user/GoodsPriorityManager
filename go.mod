@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/ClickHouse/clickhouse-go v1.5.4
+	github.com/ClickHouse/clickhouse-go/v2 v2.20.0
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-chi/render v1.0.3
 	github.com/ilyakaznacheev/cleanenv v1.5.0
@@ -12,12 +13,12 @@ require (
 	github.com/nats-io/nats.go v1.33.1
 	github.com/pressly/goose v2.7.0+incompatible
 	github.com/rs/cors v1.10.1
+	github.com/sirupsen/logrus v1.9.3
 )
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/ClickHouse/ch-go v0.61.3 // indirect
-	github.com/ClickHouse/clickhouse-go/v2 v2.20.0 // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
