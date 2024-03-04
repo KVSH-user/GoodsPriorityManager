@@ -20,10 +20,7 @@ func SubscribeToNATSEvents(natsConn *nats.Conn, chDB driver.Conn) error {
 				return
 			}
 
-			if err := clickhouse.InsertLogToClickHouse(chDB, event); err != nil {
-				fmt.Errorf("%s : %w", op, err)
-				return
-			}
+			clickhouse.BufferEvent(event)
 		})
 		if err != nil {
 			fmt.Errorf("%s : %w", op, err)
@@ -39,10 +36,7 @@ func SubscribeToNATSEvents(natsConn *nats.Conn, chDB driver.Conn) error {
 				return
 			}
 
-			if err := clickhouse.InsertLogToClickHouse(chDB, event); err != nil {
-				fmt.Errorf("%s : %w", op, err)
-				return
-			}
+			clickhouse.BufferEvent(event)
 		})
 		if err != nil {
 			fmt.Errorf("%s : %w", op, err)
@@ -58,10 +52,7 @@ func SubscribeToNATSEvents(natsConn *nats.Conn, chDB driver.Conn) error {
 				return
 			}
 
-			if err := clickhouse.InsertLogToClickHouse(chDB, event); err != nil {
-				fmt.Errorf("%s : %w", op, err)
-				return
-			}
+			clickhouse.BufferEvent(event)
 		})
 		if err != nil {
 			fmt.Errorf("%s : %w", op, err)

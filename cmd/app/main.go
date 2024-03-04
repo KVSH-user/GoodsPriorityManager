@@ -77,6 +77,8 @@ func main() {
 
 	err = natss.SubscribeToNATSEvents(natsConn, chDB)
 
+	go clickhouse.StartFlusher()
+
 	log.Info("storage successfully initialized")
 
 	router := chi.NewRouter()
